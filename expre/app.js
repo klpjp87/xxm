@@ -46,6 +46,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
+//首页
+app.use(express.static('./public'));
 module.exports = app;
-console.log(1);
+
