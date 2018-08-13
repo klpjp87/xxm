@@ -16,9 +16,7 @@ class Supplier extends BaseComponent{
             {
                 data:s
             }
-           
         )
-        
     }
     async add(req,res,next){
         let Supplier_id = await this.getId("Supplier_id")

@@ -7,6 +7,7 @@ const idsSchema = new mongoose.Schema({
 	Shop_id: Number,
 	Supplier_id:Number,
 	Material_id:Number,
+	Gys_id:Number,
 });
 
 const Ids = mongoose.model('Ids', idsSchema);
