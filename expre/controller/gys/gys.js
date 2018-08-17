@@ -1,30 +1,39 @@
 
 'use strict'
 
-import SupplierModel from '../../models/Supplier/Supplier.js'
+
 import BaseComponent from '../../prototype/baseComponent.js';
-import formidable from 'formidable'
 class Gys extends BaseComponent{
     constructor(props){
         super()
     }
     async add(req,res,next){
-        const form = new formidable.IncomingForm();
-        form.parse(req, async (err, fields, files) => {
-			try{
-				if (!fields.name) {
-					throw new Error('必须填写供应商名称');
-				}
-			}catch(err){
-				console.log(err.message, err);
-				res.send({
-					status: 0,
-					type: 'ERROR_PARAMS',
-					message: err.message
-				})
-				return
+		try{
+			let gys = req.body.gys
+			let gys_id = await this.getId("Gys_id")
+			let newgys = {
+				id:gys_id,
+				name:gys.name,
+				address:gys.address,
+				phone:gys.phone,
+				mobilephone:gys.mobilephone,
+				Fax:gsy.Fax,
 			}
-        })
+			await SupplierModel.create(Supplier)
+			res.send({
+				status: 1,
+				message: ""
+			})
+			return						
+		}catch(err){
+			console.log(err.message, err);
+			res.send({
+				status: 0,
+				type: 'ERROR_PARAMS',
+				message: err.message
+			})
+			return
+		}
     }
 }
-export default new Supplier()
+export default new Gys()
