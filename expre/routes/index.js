@@ -3,6 +3,7 @@ import user from './user';
 import supplier from './supplier'
 import init from './init'
 import gys from './gys'
+import custom from './custom'
 //import user from './user';
 
 export default app => {
@@ -10,4 +11,5 @@ export default app => {
   app.use('/supplier',supplier);
   app.use('/init',init);
   app.use('/gys',gys);
+  app.use('/custom',custom);
 }

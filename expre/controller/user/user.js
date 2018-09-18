@@ -12,6 +12,7 @@ class User extends BaseComponent{
         this.limit = this.limit.bind(this);
     }
     async limit(req,res,next){
+        
         let pageSize = req.body.pageSize 
         let currentPage = req.body.currentPage - 1
         let data = await this.modellimit(ReducerModel,pageSize,currentPage,{})

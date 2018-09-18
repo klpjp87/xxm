@@ -1,9 +1,9 @@
 
 'use strict'
 
-import GysModel from '../../models/gys/gys.js'
+import CustomModel from '../../models/custom/custom.js'
 import BaseComponent from '../../prototype/baseComponent.js';
-class Gys extends BaseComponent{
+class custom extends BaseComponent{
     constructor(props){
 		super()
 		this.add = this.add.bind(this);
@@ -11,7 +11,7 @@ class Gys extends BaseComponent{
 	}
     async limit(req,res,next){
 		try{
-			let count = await GysModel.count()
+			let count = await CustomModel.count()
 			if (count <= 0) {
 				res.send(   
 					{
@@ -27,7 +27,7 @@ class Gys extends BaseComponent{
 			if(pageSize * currentPage > count){
 				throw new Error( '传入的页数不对' );
 			}
-			let data = await this.modellimit(GysModel,pageSize,currentPage,{})
+			let data = await this.modellimit(CustomModel,pageSize,currentPage,{})
 			res.send(   
 				{
 					status:1,
@@ -46,21 +46,21 @@ class Gys extends BaseComponent{
     }
     async add(req,res,next){
 		try{
-			let gys = req.body.gys
-			let findgys = await GysModel.find({name:gys.name})
-			if(findgys.length > 0 ){
+			let custom = req.body.custom
+			let findcustom = await CustomModel.find({name:custom.name})
+			if(findcustom.length > 0 ){
 				throw new Error( '已有改用户名' );
 			}
-			let gys_id = await this.getId("Gys_id")
-			let newgys = {
-				id:gys_id,
-				name:gys.name,
-				address:gys.address,
-				phone:gys.phone,
-				mobilephone:gys.mobilephone,
-				Fax:gys.Fax,
+			let custom_id = await this.getId("Custom_id")
+			let newcustom = {
+				id:custom_id,
+				name:custom.name,
+				address:custom.address,
+				phone:custom.phone,
+				mobilephone:custom.mobilephone,
+				Fax:custom.Fax,
 			}
-			await GysModel.create(newgys)
+			await CustomModel.create(newcustom)
 			res.send({
 				status: 1,
 				message: "SUCCESS"
@@ -78,8 +78,8 @@ class Gys extends BaseComponent{
 	}
 	async updateone(req,res,next){
 		try{
-			let gys = req.body.gys
-			await GysModel.findOneAndUpdate({id:gys.id},{$set:gys})
+			let custom = req.body.custom
+			await CustomModel.findOneAndUpdate({id:custom.id},{$set:custom})
 			res.send({
 				status: 1,
 			})
@@ -97,7 +97,9 @@ class Gys extends BaseComponent{
 	async deletebyid(req,res,next){
 		try{
 			let id = req.body.id
-			let result = await GysModel.remove({id:id})
+			console.log(id)
+			let result = await CustomModel.remove({id:id})
+			console.log(result)
 			if(result.ok=1 ){
 				if(result.n <= 0 ) throw new Error('删除失败：这条数据可能已被删除')
 				res.send({
@@ -119,4 +121,4 @@ class Gys extends BaseComponent{
 		}
 	}
 }
-export default new Gys()
+export default new custom()

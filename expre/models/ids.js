@@ -8,6 +8,7 @@ const idsSchema = new mongoose.Schema({
 	Supplier_id:Number,
 	Material_id:Number,
 	Gys_id:Number,
+	Custom_id:Number,
 });
 
 const Ids = mongoose.model('Ids', idsSchema);
@@ -17,7 +18,10 @@ Ids.findOne((err, data) => {
 		console.log("idsone");
 		const newIds = new Ids({
 			Reducer_id: 0,
-			Shop_id:0
+			Shop_id:0,
+			Supplier_id:0,
+			Material_id:0,
+			Gys_id:0
 		});
 		newIds.save();
 	}

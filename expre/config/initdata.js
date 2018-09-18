@@ -5,13 +5,17 @@ export const indexMenu =
             index:"1",
             m:[
                  {
-                     name:'供应商管理',
+                     name:'供应商信息',
                      index:"/index/gys"
                  },
                  {
-                     name:'客户管理',
-                     index:"/WareHouse"
-                 }
+                     name:'客户信息',
+                     index:"/index/custom"
+                 },
+                 {
+                    name:'商品信息',
+                    index:"/index/ware"
+                },
              ]
         },
         {
