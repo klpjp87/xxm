@@ -11,6 +11,12 @@ const GysSchema = new Schema({
     phone:{type:String},//电话
     mobilephone:{type:String},//手机
     Fax:{type:String},//传真
+    wares:[//商品
+        {
+            id:{type:Number},
+            name:{type:String}
+        }
+    ]
 })
 GysSchema.index({id:1});//索引
 

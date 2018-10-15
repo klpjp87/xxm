@@ -106,7 +106,6 @@ class Gys extends BaseComponent{
 			}else{
 				throw new Error( '删除失败' );
 			}
-
 			return
 		}catch(err){
 			console.log(err.message, err);

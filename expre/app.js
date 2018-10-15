@@ -4,6 +4,10 @@ import router from './routes/index.js'
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+//jwt
+var expressJWT = require('express-jwt')
+var secretOrPrivatekey = 'teken' //加密token 检验时用
+
 import db from './mongodb/db.js';
 const app = express();
 
@@ -17,7 +21,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //跨域
 app.all('*', (req, res, next) => {
-	res.header("Access-Control-Allow-Origin", req.headers.Origin || req.headers.origin || 'https://cangdu.org');
+	//res.header("Access-Control-Allow-Origin", req.headers.Origin || req.headers.origin || 'https://cangdu.org');
+	res.header("Access-Control-Allow-Origin", 'http://localhost:8080');
 	res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
 	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
   	res.header("Access-Control-Allow-Credentials", true); //可以带cookies
@@ -29,6 +34,18 @@ app.all('*', (req, res, next) => {
 	}
 });
 app.use(cookieParser());
+//token
+app.use(expressJWT({
+	secret:secretOrPrivatekey
+}).unless({
+	path:['/index','/init/token','/init/getindexmenu'] //除了这个地址
+}))
+app.use((err,req,res,next)=>{
+	res.status(401).send('invalid token...')
+})
+
+
+
 
 router(app);
 
