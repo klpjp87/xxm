@@ -11,5 +11,6 @@ module.exports = {
 		    secure:   false,
 		    maxAge:   365 * 24 * 60 * 60 * 1000,
 		}
-	}
+	},
+	REDIS_PORT :"127.0.0.1:6379",
 }

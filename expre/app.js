@@ -8,8 +8,34 @@ var logger = require('morgan');
 var expressJWT = require('express-jwt')
 var secretOrPrivatekey = 'teken' //加密token 检验时用
 
+const redis = require('redis'); 
+const {promisify} = require('util');
+
+//const REDIS_PORT = process.env.REDIS_PORT;
+
 import db from './mongodb/db.js';
 const app = express();
+//redis
+const client = redis.createClient(6379,'127.0.0.1');
+const getAsync = promisify(client.get).bind(client);
+// client.set('key', 'value!', 'EX', 10);
+// const s = async ()=>{
+// 	let res = await getAsync('key');
+// 	console.log(res)
+// }
+// client.auth(123456, function(){
+// 	console.log(1)
+// });
+// client.set('key', 'value!', 'EX', 10);
+// client.hset("hash key", "hashtest 1", "some value", redis.print);
+// client.hset(["hash key", "hashtest 2", "some other value"], redis.print);
+// client.hkeys("hash key", function (err, replies) {
+//     console.log(replies.length + " replies:");
+//     replies.forEach(function (reply, i) {
+//         console.log("    " + i + ": " + reply);
+//     });
+//     client.quit();
+// });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -35,13 +61,41 @@ app.all('*', (req, res, next) => {
 });
 app.use(cookieParser());
 //token
+//验证指定http请求的JsonWebTokens的有效性
+//会将token信息存在req.user里
 app.use(expressJWT({
 	secret:secretOrPrivatekey
 }).unless({
-	path:['/index','/init/token','/init/getindexmenu'] //除了这个地址
+	path:['/init/token','/admin/login','/admin/register'] //除了这个地址
 }))
 app.use((err,req,res,next)=>{
-	res.status(401).send('invalid token...')
+	//res.status(401).send('invalid token...')
+	res.send({status: 401,
+		message:"未登录或者登陆超时...",})
+})
+//验证token刷新token
+app.all('/*',async function(req, res, next){
+	var url=req.path;
+	if(url=='/init/token'||url=='/admin/login'||url=='/admin/register'){
+        next();
+        return;
+	}
+	//if(await client.get(req.user)){
+		
+	
+	
+	if(req.user || req.user.name){
+		let user = await getAsync(req.user.name)
+		if(user){
+			// console.log(url,"user",user)
+			// console.log(url,"req.user.name",req.user.name)
+			client.set(req.user.name, JSON.stringify(req.user), 'EX', 100) 
+		}
+		next()
+		return
+	}
+	res.send({status: 401,
+		message:"未登录或者登陆超时...",})
 })
 
 
@@ -66,4 +120,5 @@ app.use(function(err, req, res, next) {
 //首页
 app.use(express.static('./public'));
 module.exports = app;
-
+exports.client = client
+exports.getAsync = getAsync;

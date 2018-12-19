@@ -10,10 +10,11 @@ const WareSchema = new Schema({
     purchase_price:{type: Number, isRequired: true},//进货价
     price:{type: Number,},//预售价
     custom_id:{type:Number,isRequired: true},//供应商id
+    custom_name:{type:Number,isRequired: true},
     company:{type:String},//单位
 })
 WareSchema.index({id:1});//索引
 
-const Reducer = mongoose.model('Gys', WareSchema);
+const Reducer = mongoose.model('Ware', WareSchema);
 
 export default Reducer

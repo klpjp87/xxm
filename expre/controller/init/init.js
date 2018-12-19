@@ -1,9 +1,11 @@
 
 'use strict'
-
+var path = require("path");
 import BaseComponent from '../../prototype/baseComponent.js';
 import {indexMenu} from '../../config/initdata'
-
+//import {client} from path.resolve(__dirname)+'/app.js'
+var app = require('../../app.js');
+import dtime from 'time-formater'
 var jwt = require('jsonwebtoken');
 class Init extends BaseComponent{
     constructor(props){
@@ -28,15 +30,20 @@ class Init extends BaseComponent{
     }
     async gettoken(req,res,next){
         var key = 'teken' //加密token 检验时用
+        const {user_name} = req.body.custom
+        
+        const user_token = jwt.sign({
+                    name: user_name,
+                    date: new Date().toLocaleString()}, 
+                    key, {expiresIn: 60000 * 1})
+        await app.client.set(user_name,JSON.stringify(user_token) , 'EX', 100)           
         res.json({
             result: 'ok',
-            token: jwt.sign({
-                name: "BinMaing",
-                data: "============="
-            }, key, {
-                    expiresIn: 60000 * 1
-                })
+            token: user_token
         })    
+    }
+    async getdict(req,res,next){
+
     }
 }
 export default new Init()
